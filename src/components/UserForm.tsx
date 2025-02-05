@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Form, Input, Button } from '@heroui/react';
 
 const UserForm = () => {
-  const [action, setAction] = useState(null);
+  const [action, setAction] = useState('');
   const [isFormDirty, setIsFormDirty] = useState(false);
 
   useEffect(() => {
-    const handleBeforeUnload = (e) => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       if (isFormDirty) {
-        e.preventDefault();
-        e.returnValue = '';
+      e.preventDefault();
+      e.returnValue = '';
       }
     };
 
@@ -19,13 +19,19 @@ const UserForm = () => {
     };
   }, [isFormDirty]);
 
-  const handleFormChange = () => {
-    setIsFormDirty(true);
-  };
 
-  const handleFormSubmit = (e) => {
+  interface FormData {
+    name: string;
+    address: string;
+    email: string;
+    phone: string;
+    userId?: string;
+  }
+
+  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const data = Object.fromEntries(new FormData(e.currentTarget));
+    const formData = new FormData(e.currentTarget);
+    const data: FormData = Object.fromEntries(formData.entries()) as unknown as FormData;
     data.userId = `user-${Date.now()}`;
     localStorage.setItem('userData', JSON.stringify(data));
     setAction(`submit ${JSON.stringify(data)}`);
@@ -42,7 +48,6 @@ const UserForm = () => {
           setIsFormDirty(false);
         }}
         onSubmit={handleFormSubmit}
-        onChange={handleFormChange}
       >
         <Input
           className='border-2 border-gray-300 p-2 rounded-xl font-medium text-sm text-white'

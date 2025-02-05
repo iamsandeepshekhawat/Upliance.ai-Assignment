@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
@@ -12,7 +12,12 @@ const RichTextEditor = () => {
     }
   }, []);
 
-  const handleEditorChange = (content) => {
+
+  interface HandleEditorChange {
+    (content: string): void;
+  }
+
+  const handleEditorChange: HandleEditorChange = (content) => {
     setEditorContent(content);
     localStorage.setItem('editorContent', content);
   };

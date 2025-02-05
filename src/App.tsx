@@ -1,4 +1,3 @@
-import React from "react";
 import Counter from "./components/Counter";
 import UserForm from "./components/UserForm";
 import RichTextEditor from "./components/RichTextEditor";
